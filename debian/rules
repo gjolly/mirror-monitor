@@ -11,5 +11,5 @@ override_dh_clean:
 	dh_clean
 
 override_dh_installsystemd:
-	install mirror-monitor.service debian/
-	install mirror-monitor.timer debian/
+	install --mode=644 mirror-monitor.service debian/
+	install --mode=644 mirror-monitor.timer debian/

@@ -1,0 +1,5 @@
+# Configuration file for mirror-monitor
+
+#PACKAGES="vim"
+#REPORT_URL="http://example.com/report"
+#AUTHORIZATION_TOKEN="Bearer XXXXXXXX"

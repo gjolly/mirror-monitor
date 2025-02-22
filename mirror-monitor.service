@@ -1,0 +1,11 @@
+[Unit]
+Description=mirror-monitor
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/mirror-monitor
+Restart=always
+
+[Install]
+WantedBy=default.target
+RequiredBy=network.target

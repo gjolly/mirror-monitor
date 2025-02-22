@@ -1,0 +1,49 @@
+#!/bin/bash -eu
+
+log() {
+    local message="$1"
+    local time="$(date --iso-8601=seconds --utc)"
+    printf "[%s] %s\n" "$time" "$message"
+}
+
+send_report() {
+    local URL="$1"
+    local packages="$2"
+    local report="$3"
+    local machine_id="$(cat /etc/machine-id)"
+    local speed_in_bs="$(echo "$report" | sed -n 's/^.*(\(.*\).\/s)$/\1/p' | tr '[:lower:]' '[:upper:]' | tr -d ' ' | tr -d ',' | numfmt --from=iec)"
+    local time_in_seconds="$(echo "$report" | sed -n 's/^.*in \(.*\)s .*$/\1/p')"
+    local size_in_bytes="$(echo "$report" | sed -n 's/^Fetched \(.*\). in.*$/\1/p'| tr '[:lower:]' '[:upper:]' | tr -d ',' | tr -d ' ' | numfmt --from=iec)"
+
+    data="{\"date\": \"$(date +%s)\", \"size\": \"$size_in_bytes\", \"time\": \"$time_in_seconds\", \"speed\": \"$speed_in_bs\", \"machine_id\": \"$machine_id\", \"packages\": \"$PACKAGES\"}"
+
+    if [ -n "${AUTHORIZATION_TOKEN+x}" ]; then
+        curl -XPUT -H "Authorization: $AUTHORIZATION_TOKEN" -H 'Content-Type: application/json' -d"$data" "$URL"
+    else
+        curl -XPUT -H 'Content-Type: application/json' -d"$data" "$URL"
+    fi
+}
+
+# load config
+CONFIG_FILE="/etc/mirror-monitor.rc"
+if [ -e "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+fi
+
+DIR=$(mktemp -d)
+
+cd "$DIR"
+
+default_packages="linux-firmware linux-image-unsigned-6.11.0-1007-gcp libreoffice-style-yaru linux-azure-tools-6.11.0-1005 slapd libreoffice-l10n-sr libreoffice-l10n-or libreoffice-l10n-nso php8.3-mysql glibc-doc librte-net-pcap24 linux-cloud-tools-virtual-hwe-24.04-edge linux-tools-6.11.0-1007-oracle"
+
+PACKAGES="${PACKAGES:-$default_packages}"
+
+report="$(apt download $PACKAGES 2>/dev/null | grep Fetched)"
+
+log "$report"
+
+if [ -n "${REPORT_URL+x}" ]; then
+    send_report "$REPORT_URL" "$PACKAGES" "$report"
+fi
+
+rm -r "$DIR"

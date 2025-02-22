@@ -1,3 +1,9 @@
+mirror-monitor (1.0.0-0ubuntu1~ppa1~24.10) oracular; urgency=medium
+
+  * Release to Oracular.
+
+ -- Gauthier Jolly <gauthier.jolly@canonical.com>  Sat, 22 Feb 2025 16:19:55 +0100
+
 mirror-monitor (1.0.0-0ubuntu1~ppa1) plucky; urgency=medium
 
   * Initial release.

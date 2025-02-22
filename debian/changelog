@@ -1,0 +1,5 @@
+mirror-monitor (1.0.0-0ubuntu1~ppa1) plucky; urgency=medium
+
+  * Initial release.
+
+ -- Gauthier Jolly <contact@gjolly.fr>  Sat, 22 Feb 2025 15:33:46 +0100

@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+export DESTDIR := debian/mirror-monitor
+
+%:
+	dh $@
+
+override_dh_clean:
+	rm -f debian/mirror-monitor.service
+	rm -f debian/mirror-monitor.timer
+	dh_clean
+
+override_dh_installsystemd:
+	install mirror-monitor.service debian/
+	install mirror-monitor.timer debian/

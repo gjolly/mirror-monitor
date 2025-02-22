@@ -1,0 +1,19 @@
+Source: mirror-monitor
+Section: utils
+Priority: optional
+Maintainer: Gauthier Jolly <contact@gjolly.fr>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+Standards-Version: 4.7.0
+Homepage: https://github.com/gjolly/mirror-monitor
+#Vcs-Browser: https://salsa.debian.org/debian/mirror-monitor
+#Vcs-Git: https://salsa.debian.org/debian/mirror-monitor.git
+
+Package: mirror-monitor
+Architecture: all
+Depends:
+ ${misc:Depends},
+ curl,
+Description: Monitor APT mirrors
+  Download packages and record mirror speed.

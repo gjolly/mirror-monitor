@@ -1,0 +1,2 @@
+version=4
+https://github.com/gjolly/mirror-monitor/tags .*/v?(\d.*)@ARCHIVE_EXT@
